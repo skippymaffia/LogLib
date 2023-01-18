@@ -61,7 +61,7 @@ namespace Presentation
                     Console.WriteLine(str);
                 }
             }
-
+                    
             log = GetSimpleContent(2, 3);
             var fileName = @"C:\temp\tmp-skippy.txt";
             using (FileStream stream = File.Create(fileName)) 
@@ -78,7 +78,7 @@ namespace Presentation
                     Console.WriteLine(str);
                 }
             }
-
+            
             Console.WriteLine("The End!");
         }
     }

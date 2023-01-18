@@ -1,4 +1,3 @@
-namespace Logger.Tests
 {
     [TestClass]
     public class ConsoleLoggerTests
