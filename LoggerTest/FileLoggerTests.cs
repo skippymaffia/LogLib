@@ -6,7 +6,8 @@ namespace Logger.Tests
         [TestMethod]
         public void TestAllSuccess()
         {
-            string[] msgs = { "alpha", "beta", "gamma"};
+            string s = Util.GetMoreThan1000LongInput();
+            string[] msgs = { "alpha", "beta", "gamma", s};
             foreach(var msg in msgs)
             {
                 Assert.IsTrue(FileLogger.Info(msg));
@@ -18,9 +19,7 @@ namespace Logger.Tests
         [TestMethod]
         public void TestAllUnSuccess()
         {
-            string s = Util.GetMoreThan1000LongInput();
-            Console.WriteLine(s);
-            string[] msgs = { string.Empty, "     ", null, s };
+            string[] msgs = { string.Empty, "     ", null };
             foreach (var msg in msgs)
             {
                 Assert.IsFalse(FileLogger.Info(msg));

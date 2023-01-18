@@ -6,7 +6,7 @@ namespace Logger.Tests
         [TestMethod]
         public void Test1()
         {
-            string destination = Helper.GetDestinationFileName(@"c:\temp\", "log", ".txt");
+            string destination = Helper.GetDestinationFileName(@"c:\temp\", "skippy-log", ".txt");
 
             Assert.IsTrue(destination.Contains("log"));
         }

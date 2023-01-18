@@ -1,5 +1,4 @@
 ﻿using Logger;
-using System.IO;
 
 namespace Presentation
 {
