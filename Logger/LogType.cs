@@ -1,9 +1,9 @@
-﻿namespace Logger
+﻿namespace Logger;
+
+public enum LogType
 {
-    public enum LogType
-    {
-        debug,
-        info,
-        error
-    }
+    debug,
+    info,
+    error,
+    warning
 }
