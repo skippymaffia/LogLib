@@ -1,10 +1,13 @@
-﻿namespace Logger;
+﻿using Logger.Common;
+
+namespace Logger;
 
 public static class FileLogger
 {
     private const int FILESIZE = 5000;
-    private static readonly object lockerasync = new();
+    
     private static readonly object locker = new();
+    private static SemaphoreSlim semaphoreSlim = new(1, 1);
 
     private static string dir = @"C:\temp\";
     private static string fileName = "skippy-log";
@@ -28,13 +31,13 @@ public static class FileLogger
         string msg = $"{DateTime.Now} [{type}] {message}";
         lock (locker)
         {
-            if (!File.Exists(filePath))
+            if (File.Exists(filePath))
             {
-                WriteAsync(msg);
+                Append(msg); 
             }
             else
             {
-                AppendAsync(msg);
+                Write(msg);
             }
         }
 
@@ -47,42 +50,72 @@ public static class FileLogger
     /// <param name="type">The type of the log.</param>
     /// <param name="message">The message to be logged.</param>
     /// <returns>True if success, false otherwise.</returns>
-    public static Task<bool> LogAsync(LogType type, string? message)
+    public static async Task<bool> LogAsync(LogType type, string? message)
     {
         if (string.IsNullOrWhiteSpace(message))
         {
-            return Task.FromResult(false);
+            return false;
         }
 
         string msg = $"{DateTime.Now} [{type}] {message}";
-        lock (lockerasync)
+        
+        await semaphoreSlim.WaitAsync();
+        try
         {
-            if (!File.Exists(filePath))
+            if (File.Exists(filePath))
             {
-                WriteAsync(msg);
+                await AppendAsync(msg);
             }
             else
             {
-                AppendAsync(msg);
+                await WriteAsync(msg);
             }
         }
+        finally
+        {
+            semaphoreSlim.Release();
+        }
 
-        return Task.FromResult(true);
+        return true;
     }
 
-    private static void AppendAsync(string msg)
+    private static void Append(string msg)
     {
         currFileSize = currFileSize == 0 ? File.ReadAllText(filePath).Length : currFileSize;
-        if (currFileSize + msg.Length < FILESIZE)
+        var isAppend = true;
+        if (currFileSize + msg.Length > FILESIZE)
         {
-            WriteAsync(msg, isAppend: true);
-        }
-        else
-        {
-            //Console.WriteLine("archiveing...");
             Archive();
-            WriteAsync(msg);
+            isAppend = false;            
+        }        
+            
+        Write(msg, isAppend);
+    }
+
+    private static async Task AppendAsync(string msg)
+    {
+        currFileSize = currFileSize == 0 ? File.ReadAllText(filePath).Length : currFileSize;
+        var isAppend = true;
+        if (currFileSize + msg.Length > FILESIZE)
+        {
+            Archive();
+            isAppend = false;
         }
+
+        await WriteAsync(msg, isAppend);
+    }
+
+    /// <summary>
+    /// Writes/Appends a log into a file.
+    /// </summary>
+    /// <param name="message">The message to be logged.</param>
+    /// <param name="isAppend">True if the message need to be appended, false otherwise.</param>
+    /// <returns></returns>
+    public static void Write(string message, bool isAppend = false)
+    {
+        using StreamWriter file = new(filePath, append: isAppend);
+        file.WriteLine(message);
+        currFileSize += message.Length + 2; //+2 cause cr+lf on win
     }
 
     /// <summary>

@@ -17,7 +17,7 @@ internal class Program
         return string.Format("This is the simple {0}. stream log content", i);
     }
 
-    static void Main(string[] args)
+    static async Task Main(string[] args)
     {
         string log;
         var asy = "async";
@@ -26,15 +26,15 @@ internal class Program
         {
             log = GetSimpleContent(i,1);
             
-            //ConsoleLogger.Info(log);
-            //ConsoleLogger.Debug(log);
-            //ConsoleLogger.Error(log);
-            //ConsoleLogger.Warning(log);
+            ConsoleLogger.Info(log);
+            ConsoleLogger.Debug(log);
+            ConsoleLogger.Error(log);
+            ConsoleLogger.Warning(log);
 
-            //ConsoleLogger.InfoAsync(log + asy);
-            //ConsoleLogger.DebugAsync(log + asy);
-            //ConsoleLogger.ErrorAsync(log + asy);
-            //ConsoleLogger.WarningAsync(log+ asy);
+            await ConsoleLogger.InfoAsync(log + asy);
+            await ConsoleLogger.DebugAsync(log + asy);
+            await ConsoleLogger.ErrorAsync(log + asy);
+            await ConsoleLogger.WarningAsync(log+ asy);
         }
 
         //----
@@ -46,10 +46,10 @@ internal class Program
             FileLogger.Error(log);
             FileLogger.Warning(log);
 
-            FileLogger.InfoAsync(log + asy);
-            FileLogger.DebugAsync(log + asy);
-            FileLogger.ErrorAsync(log + asy);
-            FileLogger.WarningAsync(log + asy);
+            await FileLogger.InfoAsync(log + asy);
+            await FileLogger.DebugAsync(log + asy);
+            await FileLogger.ErrorAsync(log + asy);
+            await FileLogger.WarningAsync(log + asy);
         }
 
         string[] files = Directory.GetFiles(@"c:\temp\", "skippy-*");
@@ -66,6 +66,11 @@ internal class Program
             StreamLogger.Debug(stream, log);
             StreamLogger.Error(stream, log);
             StreamLogger.Warning(stream, log);
+
+            await StreamLogger.InfoAsync(stream, log + asy);
+            await StreamLogger.DebugAsync(stream, log+asy);
+            await StreamLogger.ErrorAsync(stream, log + asy);
+            await StreamLogger.WarningAsync(stream, log + asy);
 
             stream.Position = 0;
             var reader = new StreamReader(stream);
@@ -84,6 +89,11 @@ internal class Program
             StreamLogger.Debug(stream, log);
             StreamLogger.Error(stream, log);
             StreamLogger.Warning(stream, log);
+
+            await StreamLogger.InfoAsync(stream, log + asy);
+            await StreamLogger.DebugAsync(stream, log + asy);
+            await StreamLogger.ErrorAsync(stream, log + asy);
+            await StreamLogger.WarningAsync(stream, log + asy);
 
             stream.Position = 0;
             var reader = new StreamReader(stream);

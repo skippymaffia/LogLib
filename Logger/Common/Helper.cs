@@ -1,4 +1,4 @@
-﻿namespace Logger;
+﻿namespace Logger.Common;
 
 public class Helper
 {
@@ -6,7 +6,7 @@ public class Helper
     {
         string ret = dir + fileName;
         string[] files = Directory.GetFiles(dir, fileName + "*" + fileDotExt);
-        if(files.Length==1)
+        if (files.Length == 1)
         {
             return ret + ".0" + fileDotExt;
         }
@@ -21,14 +21,14 @@ public class Helper
             {
                 nums[i] = int.Parse(x.Length > 2 ? x[1] : "0");
             }
-            catch (Exception e)  
+            catch (Exception e)
             {
-                Console.WriteLine(e.Message);                    
+                Console.WriteLine(e.Message);
             }
             i++;
         }
-        
-        num = nums.Max()+1;            
+
+        num = nums.Max() + 1;
 
         return ret + "." + num + fileDotExt;
     }

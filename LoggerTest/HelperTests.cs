@@ -1,3 +1,5 @@
+using Logger.Common;
+
 namespace Logger.Tests
 {
     [TestClass()]

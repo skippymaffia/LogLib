@@ -1,4 +1,6 @@
-﻿namespace Logger;
+﻿using Logger.Common;
+
+namespace Logger;
 
 public static class ConsoleLogger
 {
@@ -39,6 +41,8 @@ public static class ConsoleLogger
         Console.WriteLine($"{DateTime.Now} [{type}] {message}");
         Console.ForegroundColor = fgc;
     }
+
+    #region simple
 
     /// <summary>
     /// Logs only the debug type message to console.
@@ -97,7 +101,8 @@ public static class ConsoleLogger
     {
         return TryLog(LogType.warning, message);
     }
-
+#endregion simple
+   
     /// <summary>
     /// Logs the different types of messages to the console async!
     /// </summary>

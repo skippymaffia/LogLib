@@ -1,4 +1,4 @@
-﻿namespace Logger;
+﻿namespace Logger.Common;
 
 public enum LogType
 {
